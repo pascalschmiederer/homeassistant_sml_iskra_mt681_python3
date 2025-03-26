@@ -78,6 +78,7 @@ def watchdogtimer_ovf():
 
 	if message[0:16] == '1b1b1b1b01010101':
 		watchdog.stop()
+		#Get the values from dynamically from the subroutines of the protocol --> SUB: 07 01 00 01 08 00 ff
 		wirkenergie_Summe_T1_T2_Wh = round((int(message[132*2:(132 * 2 + 14)],16) / 10), 4)
 		mystring=""
 		#Just for "no Pin reading"
