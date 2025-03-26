@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+
+#Fork for update to Python3
+#Just to read out the values of "Wirkenergie_Summe_T1_T2_Wh" because I have no PIN
+
 # USB device
 usbdevice = "/dev/ttyUSB0"
 
@@ -8,7 +12,7 @@ usbdevice = "/dev/ttyUSB0"
 mqtt_username = "USERNAME"
 mqtt_password = "PASSWORD"
 mqtt_server = "HOSTNAME|IP-ADDRESS"
-mqtt_server_port = "1883"
+mqtt_server_port = 1883
 
 
 import os
@@ -19,9 +23,18 @@ import json
 from threading import Timer
 import paho.mqtt.client as mqtt
 
-client = mqtt.Client(client_id="SML-python", clean_session=False)
+try:
+	client = mqtt.Client(client_id="SML-python", clean_session=False)
+except:
+	try:
+		client = mqtt.Client(client_id="SML-python", clean_session=False, callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+	except:
+		exit()
+
+
 client.username_pw_set(username=mqtt_username, password=mqtt_password)
-client.connect(mqtt_server, port=mqtt_server_port)
+client.connect(mqtt_server, port=mqtt_server_port, keepalive=60)
+print("Connected to mqtt")
 client.loop_start()
 time.sleep(4)
 
@@ -127,7 +140,7 @@ try:
 	my_tty.close()
 	my_tty.open()
 
-except Exception, e:
+except:
 	exit()
 
 try:
